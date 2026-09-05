@@ -61,7 +61,7 @@ def _make_laplacian_matrix(
             L[i, j] = value * -1
     return (L, diags(M))
 
-def _decompose_eigenvalues(
+def _solve_eigenvalue_problem(
     L: lil_matrix,
     M: dia_matrix,
     k: int = 1
@@ -126,7 +126,7 @@ def _profile_function(function: Callable):
         return function
 
 @_profile_function
-def eigen_decomposition():
+def eigenvalue_eigenvector():
     node: hou.Node = hou.pwd()
     params = NodeParameters(node)
 
@@ -138,7 +138,7 @@ def eigen_decomposition():
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    W, V = _decompose_eigenvalues(L, M, params.eigenvalue_num)
+    W, V = _solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = _make_spectral_transform_matrix(V, M, params.tolerance)
     A_ = A.T
 
@@ -162,7 +162,7 @@ def spectral_transform_matrix():
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    _, V = _decompose_eigenvalues(L, M, params.eigenvalue_num)
+    _, V = _solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = _make_spectral_transform_matrix(V, M, params.tolerance)
 
     for i, point in enumerate(_iterate_points(geo)):
@@ -183,7 +183,7 @@ def spectral_filter_matrix(spectral_filter: Optional[SpectralFilterFunction] = N
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    W, V = _decompose_eigenvalues(L, M, params.eigenvalue_num)
+    W, V = _solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = _make_spectral_filter_matrix(W, V, M, params.tolerance, spectral_filter)
 
     for i, point in enumerate(_iterate_points(geo)):
