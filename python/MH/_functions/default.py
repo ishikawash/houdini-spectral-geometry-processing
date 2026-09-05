@@ -2,7 +2,7 @@ import numpy as np
 import numpy.typing as npt
 from scipy.sparse import lil_matrix, dia_matrix
 from scipy.sparse.linalg import eigsh
-from MH.types import SpectralFilterFunction
+from MH._types import SpectralFilterFunction
 
 
 def make_spectral_transform_matrix(

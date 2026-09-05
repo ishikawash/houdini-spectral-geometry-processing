@@ -8,7 +8,7 @@ import numpy as np
 import numpy.typing as npt
 from scipy.sparse import lil_matrix, dia_matrix, diags
 import hou
-from .types import LaplacianRow, LaplacianRowIterator, HouPointIterator, SpectralFilterFunction
+from ._types import LaplacianRow, LaplacianRowIterator, HouPointIterator, SpectralFilterFunction
 from . import _functions
 
 
