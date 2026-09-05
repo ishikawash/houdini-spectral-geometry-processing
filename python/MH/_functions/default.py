@@ -35,5 +35,5 @@ def solve_eigenvalue_problem(
     M: dia_matrix,
     k: int = 1
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
-    W, V = spy_linalg(L.tocsr(), k=k, M=M, sigma=0)
+    W, V = spy_linalg.eigsh(L.tocsr(), k=k, M=M, sigma=0)
     return W, V.T
