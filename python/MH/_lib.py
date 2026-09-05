@@ -123,6 +123,17 @@ def _profile_function(function: Callable):
     else:
         return function
 
+def _get_functions() -> Functions:
+    def cupy_enabled() -> bool:
+        value = os.getenv("MH_ENABLE_CUPY")
+        return value == "1"
+
+    if cupy_enabled():
+        return _functions.cupy
+    else:
+        return _functions.default
+
+
 @_profile_function
 def eigenvalue_eigenvector():
     node: hou.Node = hou.pwd()
@@ -136,7 +147,7 @@ def eigenvalue_eigenvector():
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    funcs: Functions = _functions.default
+    funcs: Functions = _get_functions()
     W, V = funcs.solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = funcs.make_spectral_transform_matrix(V, M, params.tolerance)
     A_ = A.T
@@ -161,7 +172,7 @@ def spectral_transform_matrix():
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    funcs: Functions = _functions.default
+    funcs: Functions = _get_functions()
     _, V = funcs.solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = funcs.make_spectral_transform_matrix(V, M, params.tolerance)
 
@@ -183,7 +194,7 @@ def spectral_filter_matrix(spectral_filter: Optional[SpectralFilterFunction] = N
 
     N: int = geo.pointCount()
     L, M = _make_laplacian_matrix(N, _iterate_laplacian_rows(geo))
-    funcs: Functions = _functions.default
+    funcs: Functions = _get_functions()
     W, V = funcs.solve_eigenvalue_problem(L, M, params.eigenvalue_num)
     A = funcs.make_spectral_filter_matrix(W, V, M, params.tolerance, spectral_filter)
 
