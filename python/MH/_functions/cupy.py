@@ -16,10 +16,10 @@ def cupy_available() -> bool:
 
 def make_spectral_transform_matrix(
     V: npt.NDArray[np.float64],
-    M: npt.NDArray[np.float64],
+    M: dia_matrix,
     tolerance: float
 ) -> lil_matrix:
-    M_ = cp.array(M)
+    M_ = cp.array(M.toarray())
     V_ = cp.array(V)
     A_ = M_ @ V_.T # (N,k)
     mask = cp.abs(A_) <= tolerance
@@ -29,11 +29,11 @@ def make_spectral_transform_matrix(
 def make_spectral_filter_matrix(
     W: npt.NDArray[np.float64],
     V: npt.NDArray[np.float64],
-    M: npt.NDArray[np.float64],
+    M: dia_matrix,
     tolerance: float,
     filter: SpectralFilterFunction
 ) -> lil_matrix:
-    M_ = cp.array(M)
+    M_ = cp.array(M.toarray())
     V_ = cp.array(V)
     h_ = cp.array(filter(W)) # (1,k)
     A_ = M_ @ V_.T # (N,k)

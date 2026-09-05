@@ -7,7 +7,7 @@ from MH._types import SpectralFilterFunction
 
 def make_spectral_transform_matrix(
     V: npt.NDArray[np.float64],
-    M: npt.NDArray[np.float64],
+    M: dia_matrix,
     tolerance: float
 ) -> lil_matrix:
     A = M @ V.T # (N,k)
@@ -18,7 +18,7 @@ def make_spectral_transform_matrix(
 def make_spectral_filter_matrix(
     W: npt.NDArray[np.float64],
     V: npt.NDArray[np.float64],
-    M: npt.NDArray[np.float64],
+    M: dia_matrix,
     tolerance: float,
     filter: SpectralFilterFunction
 ) -> lil_matrix:

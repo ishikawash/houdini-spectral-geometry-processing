@@ -43,7 +43,7 @@ class Functions(Protocol):
     def make_spectral_transform_matrix(
         self,
         V: npt.NDArray[np.float64],
-        M: npt.NDArray[np.float64],
+        M: dia_matrix,
         tolerance: float
     ) -> lil_matrix:    
         ...
@@ -52,7 +52,7 @@ class Functions(Protocol):
         self,
         W: npt.NDArray[np.float64],
         V: npt.NDArray[np.float64],
-        M: npt.NDArray[np.float64],
+        M: dia_matrix,
         tolerance: float,
         filter: SpectralFilterFunction
     ) -> lil_matrix:
