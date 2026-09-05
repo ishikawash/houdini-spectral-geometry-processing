@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 from scipy.sparse import lil_matrix, dia_matrix
-from scipy.sparse.linalg import eigsh
+from scipy.sparse import linalg as spy_linalg
 from MH._types import SpectralFilterFunction
 
 
@@ -35,5 +35,5 @@ def solve_eigenvalue_problem(
     M: dia_matrix,
     k: int = 1
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
-    W, V = eigsh(L.tocsr(), k=k, M=M, sigma=0)
+    W, V = spy_linalg(L.tocsr(), k=k, M=M, sigma=0)
     return W, V.T
