@@ -1,11 +1,18 @@
+import sys
 import numpy as np
 import numpy.typing as npt
 from scipy.sparse import lil_matrix, dia_matrix
 from MH._types import SpectralFilterFunction
 
-import cupy as cp
-from cupyx.scipy.sparse import linalg as cpx_linalg
+try:
+    import cupy as cp
+    from cupyx.scipy.sparse import linalg as cpx_linalg
+except:
+    pass
 
+
+def cupy_available() -> bool:
+    return "cupy" in sys.modules
 
 def make_spectral_transform_matrix(
     V: npt.NDArray[np.float64],

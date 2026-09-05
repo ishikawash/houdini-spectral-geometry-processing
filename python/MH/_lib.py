@@ -1,6 +1,7 @@
 import typing
 from typing import Callable, Optional, Protocol, runtime_checkable
 import os
+import logging
 import dataclasses
 import cProfile
 from pathlib import Path
@@ -10,6 +11,8 @@ from scipy.sparse import lil_matrix, dia_matrix, diags
 import hou
 from ._types import LaplacianRow, LaplacianRowIterator, HouPointIterator, SpectralFilterFunction
 from . import _functions
+
+_logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -124,14 +127,16 @@ def _profile_function(function: Callable):
         return function
 
 def _get_functions() -> Functions:
-    def cupy_enabled() -> bool:
-        value = os.getenv("MH_ENABLE_CUPY")
+    def use_cupy() -> bool:
+        value = os.getenv("MH_USE_CUPY")
         return value == "1"
 
-    if cupy_enabled():
-        return _functions.cupy
-    else:
-        return _functions.default
+    if use_cupy():
+        if _functions.cupy.cupy_available():
+            return _functions.cupy
+        else:
+            _logger.warning("CuPy is not available.")
+    return _functions.default
 
 
 @_profile_function
