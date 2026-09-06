@@ -33,7 +33,8 @@ def make_spectral_filter_matrix(
 def solve_eigenvalue_problem(
     L: lil_matrix,
     M: dia_matrix,
-    k: int = 1
+    k: int = 1,
+    tolerance: float = 1e-6
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
-    W, V = spy_linalg.eigsh(L.tocsr(), k=k, M=M, sigma=0)
+    W, V = spy_linalg.eigsh(L.tocsr(), k=k, M=M, sigma=0, tol=tolerance)
     return W, V.T
